@@ -1,29 +1,42 @@
 import React, { Component } from "react";
+import Modal from "./components/Modal";
 
 const todoItems = [
   {
-    id: 1,
-    title: "Go to Market",
-    description: "Buy ingredients to prepare dinner",
-    completed: true,
+    "id": 1,
+    "title": "Driver License",
+    "description": "I need to get the permanent card.",
+    "completed": false
   },
   {
-    id: 2,
-    title: "Study",
-    description: "Read Algebra and History textbook for the upcoming test",
-    completed: false,
+    "id": 2,
+    "title": "Go to the market",
+    "description": "Buy some good stuffs to sell to my clients.",
+    "completed": false
   },
   {
-    id: 3,
-    title: "Sammy's books",
-    description: "Go to library to return Sammy's books",
-    completed: true,
+    "id": 3,
+    "title": "Mechanic",
+    "description": "Need to put some new oil in the car",
+    "completed": false
   },
   {
-    id: 4,
-    title: "Article",
-    description: "Write article on how to use Django with React",
-    completed: false,
+    "id": 4,
+    "title": "Cooking",
+    "description": "I have a new recipe today!!!",
+    "completed": true
+  },
+  {
+    "id": 5,
+    "title": "Cakes",
+    "description": "Delicious cakes in the mainland",
+    "completed": false
+  },
+  {
+    "id": 6,
+    "title": "Lucy Confectioneries",
+    "description": "Has the best cake ever!!!!! Need to buy some for friends",
+    "completed": false
   },
 ];
 
@@ -33,8 +46,34 @@ class App extends Component {
     this.state = {
       viewCompleted: false,
       todoList: todoItems,
+      modal: false,
+      activeItem: {
+        title: "",
+        description: "",
+        completed: false,
+      },
     };
   }
+
+  toggle = () => {
+    this.setState({ modal: !this.state.modal });
+  };
+
+  handleSubmit = (item) => {
+    this.toggle();
+
+    alert("save" + JSON.stringify(item));
+  };
+
+  handleDelete = (item) => {
+    alert("delete" + JSON.stringify(item));
+  };
+
+  createItem = () => {
+    const item = { title: "", description: "", completed: false };
+
+    this.setState({ activeItem: item, modal: !this.state.modal });
+  };
 
   displayCompleted = (status) => {
     if (status) {
@@ -85,11 +124,13 @@ class App extends Component {
         <span>
           <button
             className="btn btn-secondary mr-2"
+            onClick={() => this.editItem(item)}
           >
             Edit
           </button>
           <button
             className="btn btn-danger"
+            onClick={() => this.handleDelete(item)}
           >
             Delete
           </button>
@@ -108,6 +149,7 @@ class App extends Component {
               <div className="mb-4">
                 <button
                   className="btn btn-primary"
+                  onClick={this.createItem}
                 >
                   Add task
                 </button>
@@ -119,6 +161,13 @@ class App extends Component {
             </div>
           </div>
         </div>
+        {this.state.modal ? (
+          <Modal
+            activeItem={this.state.activeItem}
+            toggle={this.toggle}
+            onSave={this.handleSubmit}
+          />
+        ) : null}
       </main>
     );
   }
